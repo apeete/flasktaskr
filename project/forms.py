@@ -1,9 +1,9 @@
-from flask_wtf import form
+from flask_wtf import Form
 from wtforms import StringField, DateField, IntegerField, \
     SelectField
 from wtforms.validators import DataRequired
 
-class AddTaskForm(form):
+class AddTaskForm(Form):
     task_id = IntegerField()
     name = StringField('Task Name', validators=[DataRequired()])
     due_date = DateField(

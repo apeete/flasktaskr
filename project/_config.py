@@ -1,6 +1,6 @@
 import os
 
-#grab folder where this script lives
+# grab folder where this script lives
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 DATABASE = 'flasktaskr.db'
@@ -9,5 +9,8 @@ PASSWORD = 'admin'
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'my_precious'
 
-#define the full path for the database
+# define the full path for the database
 DATABASE_PATH = os.path.join(basedir, DATABASE)
+
+# the database uri
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
