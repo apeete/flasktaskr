@@ -1,18 +1,25 @@
 # import sqlite3
-from forms import AddTaskForm
+
+###############
+### imports ###
+###############
+
+from forms import AddTaskForm, RegisterForm, LoginForm
 
 from functools import wraps
 from flask import Flask, flash, redirect, render_template, \
     request, session, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 
-#config
+################
+#### config ####
+################
 
 app = Flask(__name__)
 app.config.from_object('_config')
 db = SQLAlchemy(app)
 
-from models import Task
+from models import Task, User
 
 #helpers
 
@@ -103,6 +110,23 @@ def delete_entry(task_id):
     flash('The task was deleted. Want to add a new one?')
     return redirect(url_for('tasks'))
 
+@app.route('/register/', methods=['GET', 'POST'])
+def register():
+    error = None
+    form = RegisterForm(request.form)
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            new_user = User(
+                form.name.data,
+                form.email.data,
+                form.password.data,
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Thanks for registering. Please login')
+            return redirect(url_for('login'))
+    return render_template('register.html', form=form, error=error)
+
 # METHODS TO BE USED WITH SQLITE DATABASE
 # import 'g' at the top
 
@@ -134,7 +158,7 @@ def delete_entry(task_id):
     #     closed_tasks=closed_tasks
     # )
 
-#Add new tasks
+# Add new tasks
 # @app.route('/add/', methods=['POST'])
 # @login_required
 # def new_task():
